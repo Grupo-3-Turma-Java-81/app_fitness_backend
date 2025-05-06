@@ -2,11 +2,9 @@ package com.generation.app_fitness_backend.controller;
 
 import java.util.List;
 import java.util.Optional;
-import java.util.function.LongToDoubleFunction;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -21,18 +19,23 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.server.ResponseStatusException;
 
 import com.generation.app_fitness_backend.model.Aluno;
+import com.generation.app_fitness_backend.model.AlunoIMC;
 import com.generation.app_fitness_backend.repository.AlunoRepository;
 import com.generation.app_fitness_backend.repository.TreinoRepository;
+import com.generation.app_fitness_backend.service.AlunoService;
 
 import jakarta.validation.Valid;
 
 @RestController
-@RequestMapping("/aluno")
+@RequestMapping("/alunos")
 @CrossOrigin(origins = "*", allowedHeaders = "*")
 public class AlunoController {
 
 	@Autowired
 	private AlunoRepository alunoRepository;
+
+	@Autowired
+	private AlunoService alunoService;
 
 	@Autowired
 	private TreinoRepository treinoRepository;
@@ -48,26 +51,35 @@ public class AlunoController {
 				.orElse(ResponseEntity.status(HttpStatus.NOT_FOUND).build());
 	}
 
-	@GetMapping("/aluno/{nome}")
+	@GetMapping("/procura-aluno/{nome}")
 	public ResponseEntity<List<Aluno>> getByNome(@PathVariable String nome) {
 		return ResponseEntity.ok(alunoRepository.findByNomeContainingIgnoreCase(nome));
 	}
 
 	@PostMapping("/criar")
-	public ResponseEntity<Aluno> post(@Valid @RequestBody Aluno aluno) {
-		if (treinoRepository.existsById(aluno.getTreino().getId()))
-			return ResponseEntity.status(HttpStatus.CREATED).body(alunoRepository.save(aluno));
-		throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "O treino não existe!", null);
+	public ResponseEntity<AlunoIMC> post(@Valid @RequestBody Aluno aluno) {
+		if (!treinoRepository.existsById(aluno.getTreino().getId())){
+			throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "O treino não existe!", null);
+		}
+
+		Aluno alunoSalvo = alunoRepository.save(aluno);
+		AlunoIMC dto = alunoService.calculaImcAluno(alunoSalvo);
+		
+		return ResponseEntity.status(HttpStatus.CREATED).body(dto);
 	}
 
 	@PutMapping("/atualizar")
-	public ResponseEntity<Aluno> put(@Valid @RequestBody Aluno aluno) {
+	public ResponseEntity<AlunoIMC> put(@Valid @RequestBody Aluno aluno) {
 		if (alunoRepository.existsById(aluno.getId())) {
 
-			if (treinoRepository.existsById(aluno.getTreino().getId()))
-				return ResponseEntity.status(HttpStatus.OK).body(alunoRepository.save(aluno));
-
-			throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "O treino não existe!", null);
+			if (!treinoRepository.existsById(aluno.getTreino().getId())){
+				throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "O treino não existe!", null);
+			}
+			
+			Aluno alunoSalvo = alunoRepository.save(aluno);
+			AlunoIMC dto = alunoService.calculaImcAluno(alunoSalvo);
+			return ResponseEntity.status(HttpStatus.OK).body(dto);
+			
 		}
 
 		return ResponseEntity.status(HttpStatus.NOT_FOUND).build();

@@ -7,6 +7,7 @@ public class UsuarioLogin {
 	private String usuario;
 	private String senha;
 	private String foto;
+	private String tipoUsuario;
 	private String token;
 
 	public Long getId() {
@@ -47,6 +48,14 @@ public class UsuarioLogin {
 
 	public void setFoto(String foto) {
 		this.foto = foto;
+	}
+
+	public String getTipoUsuario() {
+		return this.tipoUsuario;
+	}
+
+	public void setTipoUsuario(String tipoUsuario) {
+		this.tipoUsuario = tipoUsuario;
 	}
 
 	public String getToken() {

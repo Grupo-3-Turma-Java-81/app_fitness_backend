@@ -7,7 +7,6 @@ import org.springframework.data.repository.query.Param;
 
 import com.generation.app_fitness_backend.model.Aluno;
 
-public interface AlunoRepository extends JpaRepository<Aluno, Long> {
-	
+public interface AlunoRepository extends JpaRepository<Aluno, Long> {	
 	public List<Aluno> findByNomeContainingIgnoreCase(@Param("nome") String nome);
 }

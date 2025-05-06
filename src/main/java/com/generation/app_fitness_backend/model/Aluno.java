@@ -1,7 +1,6 @@
 package com.generation.app_fitness_backend.model;
 
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 
 import org.hibernate.annotations.UpdateTimestamp;
 
@@ -34,8 +33,8 @@ public class Aluno {
 	private String endereco;
 	
 	@NotNull
-	@Size(min = 10, max = 1000, message = "O atributo endereco deve conter no mínimo 10 e no máximo 1000 caracteres")
-	private int telefone;
+	@Size(min = 10, max = 20, message = "O atributo telefone deve conter no mínimo 10 e no máximo 20 caracteres")
+	private String telefone;
 	
 	@UpdateTimestamp
 	private LocalDate dataMatricula;
@@ -53,6 +52,18 @@ public class Aluno {
 	@ManyToOne
 	@JsonIgnoreProperties("aluno")
 	private Usuario usuario;
+
+	public Aluno(Long id, String nome, String endereco, String telefone, LocalDate dataMatricula, Double peso, Double altura) {
+		this.id = id;
+		this.nome = nome;
+		this.endereco = endereco;
+		this.telefone = telefone;
+		this.dataMatricula = dataMatricula;
+		this.peso = peso;
+		this.altura = altura;
+	}
+
+	public Aluno(){ }
 
 	public Long getId() {
 		return id;
@@ -78,11 +89,11 @@ public class Aluno {
 		this.endereco = endereco;
 	}
 
-	public int getTelefone() {
+	public String getTelefone() {
 		return telefone;
 	}
 
-	public void setTelefone(int telefone) {
+	public void setTelefone(String telefone) {
 		this.telefone = telefone;
 	}
 
@@ -124,8 +135,5 @@ public class Aluno {
 
 	public void setUsuario(Usuario usuario) {
 		this.usuario = usuario;
-	}
-	
-	
-	
+	}	
 }
