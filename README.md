@@ -34,6 +34,8 @@ Com isso, o Projeto-Verão se propõe a ser uma ferramenta central para treinos,
 ## 🗃️ Entidades e Atributos
 O sistema utiliza o banco de dados `db_sistema_academia`, composto por três entidades principais: `tb_alunos`, `tb_treinos` e `tb_usuarios`.
 
+![Image](https://github.com/user-attachments/assets/e3d31507-f3d4-42ab-9eda-9e798696c17b)
+
 ### 🧍‍♂️ Aluno (`tb_alunos`)
 A tabela de alunos armazena os dados pessoais e de vínculo de cada aluno. Possui os seguintes atributos:
 
