@@ -1,11 +1,11 @@
-# FitSync - Aplicativo para gerenciamento de treinos!
+# Projeto-Verão - Aplicativo para gerenciamento de treinos!
 
 Projeto desenvolvido como parte do Desafio 3 do Projeto Integrador do curso de Fullstack da Generation Brasil, com foco em criar uma aplicação funcional para auxiliar no gerenciamento de treinos de forma individual.
 
 
 ## 👨‍👦‍👦 Descrição do Projeto
 
-O FitSync é um sistema completo para acompanhamento de rotina fitness. Ele permite o registro, visualização e atualização de treinos, além do monitoramento do progresso físico dos usuários. A aplicação oferece uma experiência simples, intuitiva e eficiente para quem busca manter o foco em seus objetivos de saúde e bem-estar.
+O Projeto-Verão é um sistema completo para acompanhamento de rotina fitness. Ele permite o registro, visualização e atualização de treinos, além do monitoramento do progresso físico dos usuários. A aplicação oferece uma experiência simples, intuitiva e eficiente para quem busca manter o foco em seus objetivos de saúde e bem-estar.
 
 
 ### 🎯 Objetivo
@@ -20,7 +20,7 @@ O público-alvo deste sistema são pessoas que praticam atividades físicas regu
 
 ## ❗ Problemas que o projeto visa resolver:
 
-O sistema FitSync foi desenvolvido para solucionar diversos desafios enfrentados por quem treina, como:
+O sistema Projeto-Verão foi desenvolvido para solucionar diversos desafios enfrentados por quem treina, como:
 
 - Falta de organização nos treinos
 - Dificuldade de manter constância
@@ -28,12 +28,67 @@ O sistema FitSync foi desenvolvido para solucionar diversos desafios enfrentados
 - Falta de motivação por não acompanhar resultados
 - Dificuldade de personal trainers em acompanhar alunos remotamente
 - 
-Com isso, o FitSync se propõe a ser uma ferramenta central para treinos, progresso físico e motivação pessoal.
+Com isso, o Projeto-Verão se propõe a ser uma ferramenta central para treinos, progresso físico e motivação pessoal.
 
 
 ## 🗃️ Entidades e Atributos
+O sistema utiliza o banco de dados `db_sistema_academia`, composto por três entidades principais: `tb_alunos`, `tb_treinos` e `tb_usuarios`.
+
+### 🧍‍♂️ Aluno (`tb_alunos`)
+A tabela de alunos armazena os dados pessoais e de vínculo de cada aluno. Possui os seguintes atributos:
+
+- `id`: Identificador único  
+- `nome`: Nome completo  
+- `endereco`: Endereço residencial  
+- `telefone`: Telefone para contato  
+- `data_matricula`: Data de matrícula no sistema  
+- `altura`: Altura do aluno  
+- `peso`: Peso do aluno  
+- `treino_id`: Referência ao treino associado  
+- `usuario_id`: Referência ao usuário do sistema  
+
+### 🏋️‍♀️ Treino (`tb_treinos`)
+Essa tabela armazena as informações relacionadas aos planos de treino cadastrados na academia. Possui os seguintes campos:
+
+- `id`: Identificador único  
+- `descricao`: Descrição do plano de treino  
+- `dia_semana_treino`: Dias da semana em que o treino ocorre  
+- `status`: Status do treino (ativo, inativo)  
+- `tipo_treino`: Tipo do treino (ex: hipertrofia, emagrecimento)  
+
+### 👤 Usuário (`tb_usuarios`)
+A tabela de usuários armazena as informações de acesso ao sistema. Os campos disponíveis são:
+
+- `id`: Identificador único  
+- `nome`: Nome do usuário  
+- `usuario`: Nome de login  
+- `senha`: Senha de acesso  
+- `foto`: Foto do perfil  
+- `tipo_usuario`: Tipo de usuário (ex: administrador, aluno, instrutor)  
+
+---
 
 ## 🔧 Funcionalidades (CRUD)
+
+O sistema oferece funcionalidades completas de CRUD (Create, Read, Update, Delete) para as três entidades principais.
+
+### 🧍‍♂️ Aluno
+- **Criar**: Cadastrar novo aluno  
+- **Listar**: Visualizar todos os alunos (filtro por nome ou ID)  
+- **Atualizar**: Editar informações de um aluno  
+- **Excluir**: Remover cadastro  
+
+### 🏋️‍♀️ Treino
+- **Criar**: Cadastrar novo treino  
+- **Listar**: Visualizar todos os treinos (busca por tipo ou status)  
+- **Atualizar**: Alterar informações de um treino  
+- **Excluir**: Deletar registro  
+
+### 👤 Usuário
+- **Criar**: Cadastrar novo usuário  
+- **Listar**: Visualizar todos os usuários (filtro por nome ou ID)  
+- **Atualizar**: Alterar informações de um usuário  
+- **Excluir**: Deletar registro  
 
 ## 💻 Tecnologias Utilizadas
 
@@ -49,23 +104,26 @@ Com isso, o FitSync se propõe a ser uma ferramenta central para treinos, progre
 | Discord         | Para comunicação da equipe                          |
 
 
-## 🧪 Testes com Insomnia/Postman
+## 🧪 Testes com Swagger
 
-Um arquivo .yaml com as requisições já prontas está disponível na pasta insomnia.
-Basta importar no Insomnia/Postman e começar a testar!
+A API pode ser testada diretamente utilizando o Swagger, que é gerado automaticamente pela aplicação Spring Boot.
 
-## ▶️ Como Rodar o Projeto
+Após iniciar a aplicação, acesse a seguinte URL no navegador para visualizar e interagir com os endpoints disponíveis:
+
+## ▶️ Como Rodar o Projeto Localmente
 1. Clone o repositório
 2. Configure o banco de dados MySQL no arquivo application.properties:
     Abra o arquivo src/main/resources/application.properties e configure os parâmetros de conexão com o banco de dados MySQL de acordo com o que está configurado no seu ambiente local:
 
-    spring.datasource.url=jdbc:mysql://localhost:3306/app_fitness_backend
-    spring.datasource.username=seu_usuario       # Substitua 'seu_usuario' pelo nome de usuário do MySQL da sua máquina
-    spring.datasource.password=sua_senha         # Substitua 'sua_senha' pela senha do usuário do MySQL na sua máquina
-    spring.jpa.hibernate.ddl-auto=update
-    spring.jpa.show-sql=true
 
-Importante: Lembre-se de substituir seu_usuario e sua_senha pelos dados corretos do MySQL configurados na sua máquina.
+ spring.profiles.active=dev
+springdoc.api-docs.path=/v3/api-docs
+springdoc.swagger-ui.path=/swagger-ui.html
+springdoc.swagger-ui.operationsSorter=method
+springdoc.swagger-ui.disable-swagger-default-url=true
+springdoc.swagger-ui.use-root-path=true
+
+Importante: Lembre-se de substituir seu_usuario e sua_senha pelos dados corretos do MySQL configurados na sua máquina e alterar o spring.profiles.active para ---> dev.
 
 3. Execute a aplicação:
     Pela IDE:
