@@ -27,54 +27,55 @@ import com.generation.app_fitness_backend.repository.TreinoRepository;
 import jakarta.validation.Valid;
 
 @RestController
-@RequestMapping("/temas")
+@RequestMapping("/treinos")
 @CrossOrigin(origins = "*",  allowedHeaders = "*")
-public class TemaController {
+public class TreinoController {
 	
 	@Autowired
-	private TreinoRepository temaRepository;
+	private TreinoRepository treinoRepository;
 	
-	@GetMapping
+	@GetMapping("/get-all")
 	public ResponseEntity<List<Treino>> getAll() {
-		return ResponseEntity.ok(temaRepository.findAll());
+		return ResponseEntity.ok(treinoRepository.findAll());
 	}
+	
     @GetMapping("/{id}")
     public ResponseEntity<Treino> getById(@PathVariable Long id){
-        return temaRepository.findById(id)
+        return treinoRepository.findById(id)
             .map(resposta -> ResponseEntity.ok(resposta))
             .orElse(ResponseEntity.status(HttpStatus.NOT_FOUND).build());
     }
     
-    @GetMapping("/descricao/{descricao}")
-    public ResponseEntity<List<Treino>> getByTitle(@PathVariable 
-    String descricao){
-        return ResponseEntity.ok(temaRepository
-            .findAllByDescricaoContainingIgnoreCase(descricao));
+    @GetMapping("/treino/{tipoTreino}")
+    public ResponseEntity<List<Treino>> getByTipoTreino(@PathVariable 
+    String tipoTreino){
+        return ResponseEntity.ok(treinoRepository
+            .findByTipoTreinoContainingIgnoreCase(tipoTreino));
     }
     
-    @PostMapping
-    public ResponseEntity<Treino> post(@Valid @RequestBody Treino tema){
+    @PostMapping("/criar")
+    public ResponseEntity<Treino> post(@Valid @RequestBody Treino treino){
         return ResponseEntity.status(HttpStatus.CREATED)
-                .body(temaRepository.save(tema));
+                .body(treinoRepository.save(treino));
     }
     
-    @PutMapping
-    public ResponseEntity<Treino> put(@Valid @RequestBody Treino tema){
-        return temaRepository.findById(tema.getId())
+    @PutMapping("/atualizar")
+    public ResponseEntity<Treino> put(@Valid @RequestBody Treino treino){
+        return treinoRepository.findById(treino.getId())
             .map(resposta -> ResponseEntity.status(HttpStatus.CREATED)
-            .body(temaRepository.save(tema)))
+            .body(treinoRepository.save(treino)))
             .orElse(ResponseEntity.status(HttpStatus.NOT_FOUND).build());
     }
     
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    @DeleteMapping("/{id}")
+    @DeleteMapping("/deletar/{id}")
     public void delete(@PathVariable Long id) {
-        Optional<Treino> tema = temaRepository.findById(id);
+        Optional<Treino> treino = treinoRepository.findById(id);
         
-        if(tema.isEmpty())
+        if(treino.isEmpty())
             throw new ResponseStatusException(HttpStatus.NOT_FOUND);
         
-        temaRepository.deleteById(id);              
+        treinoRepository.deleteById(id);              
     }
 
 
