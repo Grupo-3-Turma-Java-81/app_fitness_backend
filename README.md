@@ -66,9 +66,8 @@ A tabela de usuários armazena as informações de acesso ao sistema. Os campos 
 - `usuario`: Nome de login  
 - `senha`: Senha de acesso  
 - `foto`: Foto do perfil  
-- `tipo_usuario`: Tipo de usuário (ex: administrador, aluno, instrutor)  
-
----
+- `tipo_usuario`: Tipo de usuário (ex: administrador, aluno, instrutor)
+  
 
 ## 🔧 Funcionalidades (CRUD)
 
