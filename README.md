@@ -111,6 +111,8 @@ A API pode ser testada diretamente utilizando o Swagger, que é gerado automatic
 
 Após iniciar a aplicação, acesse a seguinte URL no navegador para visualizar e interagir com os endpoints disponíveis:
 
+https://app-fitness-backend.onrender.com/
+
 ## ▶️ Como Rodar o Projeto Localmente
 1. Clone o repositório
 2. Configure o banco de dados MySQL no arquivo application.properties:
