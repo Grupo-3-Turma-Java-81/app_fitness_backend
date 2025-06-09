@@ -20,6 +20,7 @@ import org.springframework.web.server.ResponseStatusException;
 
 import com.generation.app_fitness_backend.model.Aluno;
 import com.generation.app_fitness_backend.model.AlunoIMC;
+import com.generation.app_fitness_backend.model.Treino;
 import com.generation.app_fitness_backend.repository.AlunoRepository;
 import com.generation.app_fitness_backend.repository.TreinoRepository;
 import com.generation.app_fitness_backend.service.AlunoService;
@@ -46,9 +47,12 @@ public class AlunoController {
 	}
 
 	@GetMapping("/{id}")
-	public ResponseEntity<Aluno> getByID(@PathVariable Long id) {
-		return alunoRepository.findById(id).map(resposta -> ResponseEntity.ok(resposta))
-				.orElse(ResponseEntity.status(HttpStatus.NOT_FOUND).build());
+	public ResponseEntity<AlunoIMC> getById(@PathVariable Long id) {
+	    Aluno aluno = alunoRepository.findById(id)
+	                     .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
+
+	    AlunoIMC dto = alunoService.calculaImcAluno(aluno);
+	    return ResponseEntity.ok(dto);
 	}
 
 	@GetMapping("/procura-aluno/{nome}")
@@ -58,32 +62,48 @@ public class AlunoController {
 
 	@PostMapping("/criar")
 	public ResponseEntity<AlunoIMC> post(@Valid @RequestBody Aluno aluno) {
-		if (!treinoRepository.existsById(aluno.getTreino().getId())){
-			throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "O treino não existe!", null);
-		}
 
-		Aluno alunoSalvo = alunoRepository.save(aluno);
-		AlunoIMC dto = alunoService.calculaImcAluno(alunoSalvo);
-		
-		return ResponseEntity.status(HttpStatus.CREATED).body(dto);
+	    if (aluno.getTreinos() == null || aluno.getTreinos().isEmpty()) {
+	        throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "O aluno deve ter pelo menos um treino!");
+	    }
+	    
+	
+	    for (Treino treino : aluno.getTreinos()) {
+	        if (treino.getId() == null || !treinoRepository.existsById(treino.getId())) {
+	            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "O treino com id " + treino.getId() + " não existe!");
+	        }
+	    }
+
+
+	    Aluno alunoSalvo = alunoRepository.save(aluno);
+	    AlunoIMC dto = alunoService.calculaImcAluno(alunoSalvo);
+	    
+	    return ResponseEntity.status(HttpStatus.CREATED).body(dto);
 	}
 
 	@PutMapping("/atualizar")
 	public ResponseEntity<AlunoIMC> put(@Valid @RequestBody Aluno aluno) {
-		if (alunoRepository.existsById(aluno.getId())) {
+	    if (alunoRepository.existsById(aluno.getId())) {
 
-			if (!treinoRepository.existsById(aluno.getTreino().getId())){
-				throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "O treino não existe!", null);
-			}
-			
-			Aluno alunoSalvo = alunoRepository.save(aluno);
-			AlunoIMC dto = alunoService.calculaImcAluno(alunoSalvo);
-			return ResponseEntity.status(HttpStatus.OK).body(dto);
-			
-		}
+	
+	        if (aluno.getTreinos() == null || aluno.getTreinos().isEmpty()) {
+	            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "O aluno deve ter pelo menos um treino!");
+	        }
 
-		return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+	        for (Treino treino : aluno.getTreinos()) {
+	            if (treino.getId() == null || !treinoRepository.existsById(treino.getId())) {
+	                throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "O treino com id " + treino.getId() + " não existe!");
+	            }
+	        }
+	        
+	        Aluno alunoSalvo = alunoRepository.save(aluno);
+	        AlunoIMC dto = alunoService.calculaImcAluno(alunoSalvo);
+	        return ResponseEntity.status(HttpStatus.OK).body(dto);
+	    }
+
+	    return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
 	}
+
 
 	@ResponseStatus(HttpStatus.NO_CONTENT)
 	@DeleteMapping("/deletar/{id}")

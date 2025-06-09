@@ -10,6 +10,7 @@ import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 import jakarta.validation.constraints.NotBlank;
@@ -35,10 +36,10 @@ public class Treino {
 	@NotBlank
 	private String status;
 	
-	@OneToMany(fetch = FetchType.EAGER, mappedBy = "treino", cascade = CascadeType.REMOVE)
+	@ManyToOne
 	@JsonIgnoreProperties("treino")
-	private List<Aluno> aluno;
-
+	private Aluno aluno;
+	
 	public Long getId() {
 		return id;
 	}
@@ -79,11 +80,13 @@ public class Treino {
 		this.status = status;
 	}
 
-	public List<Aluno> getAluno() {
+	public Aluno getAluno() {
 		return aluno;
 	}
 
-	public void setAluno(List<Aluno> aluno) {
+	public void setAluno(Aluno aluno) {
 		this.aluno = aluno;
 	}
+
+
 }

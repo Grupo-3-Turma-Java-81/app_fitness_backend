@@ -1,16 +1,19 @@
 package com.generation.app_fitness_backend.model;
 
 import java.time.LocalDate;
+import java.util.List;
 
 import org.hibernate.annotations.UpdateTimestamp;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.ManyToOne;
+import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
@@ -45,9 +48,9 @@ public class Aluno {
 	@NotNull
 	private Double altura;
 	
-	@ManyToOne
+	@OneToMany(mappedBy = "aluno", cascade = CascadeType.REMOVE)
 	@JsonIgnoreProperties("aluno")
-	private Treino treino;
+	private List<Treino> treinos;
 	
 	@ManyToOne
 	@JsonIgnoreProperties("aluno")
@@ -121,12 +124,13 @@ public class Aluno {
 		this.altura = altura;
 	}
 
-	public Treino getTreino() {
-		return treino;
+
+	public List<Treino> getTreinos() {
+		return treinos;
 	}
 
-	public void setTreino(Treino treino) {
-		this.treino = treino;
+	public void setTreinos(List<Treino> treinos) {
+		this.treinos = treinos;
 	}
 
 	public Usuario getUsuario() {
